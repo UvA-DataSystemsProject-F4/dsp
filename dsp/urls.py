@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from dspdata import views
+from dspui.views import IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('loaddata/', views.loaddata_view),
+    path('', IndexView.as_view()),
 
 ]
