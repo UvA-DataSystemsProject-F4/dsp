@@ -1,4 +1,5 @@
 import base64
+import codecs
 import email
 import re
 
@@ -27,12 +28,12 @@ def get_payload(msg, decode_base64=False):
         if not decode_base64:
             return body
         else:
-            return base64.b64decode(body).decode('utf-8')
+            return base64.b64decode(body + "===").decode('ISO-8859-1')
     else:
         if not decode_base64:
             return msg.get_payload()
         else:
-            return base64.b64decode(msg.get_payload()).decode('utf-8')
+            return base64.b64decode(msg.get_payload() + "===").decode('ISO-8859-1')
 
 
 def extract(mail, ds, is_base64) -> RawEmailData:

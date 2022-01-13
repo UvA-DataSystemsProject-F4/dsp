@@ -2,6 +2,8 @@ import email
 import os
 from fnmatch import fnmatch
 
+from tqdm import tqdm
+
 from dspdata.email_importer.email_helper import extract_content
 from dspdata.models import Datasource, SubDatasource, RawEmailData
 
@@ -15,10 +17,10 @@ class EmailImporter:
             ds = Datasource.objects.get(name="SPAM Archive")
         else:
             Datasource(name="SPAM Archive", description="Spam Archive http://untroubled.org/spam/",
-                            link="http://untroubled.org/spam/").save()
+                       link="http://untroubled.org/spam/").save()
 
-        for path, subdirs, files in os.walk(self.root_dir):
-            for name in files:
+        for path, subdirs, files in tqdm(list(os.walk(self.root_dir))):
+            for name in tqdm(files):
                 if fnmatch(name, "*.txt"):
                     if SubDatasource.objects.filter(source_information=name).exists():
                         sbs = SubDatasource.objects.get(source_information=name)
