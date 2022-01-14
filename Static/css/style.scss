@@ -2,3 +2,25 @@ $primary: #264653;
 $secondary: #2a9d8f;
 $tertiary: #c9dfdd;
 @import './bootstrap/bootstrap';
+
+
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.sideBarView {
+  width: 30%;
+  left: 0;
+  background-color: gray;
+}
+
+.mainContentView {
+  width: 70%;
+  right: 0;
+  background-color: lightblue;
+}

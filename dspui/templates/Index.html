@@ -1,4 +1,10 @@
 {% extends 'Base.html' %}
 {% block content %}
-    <h1>Content goes here</h1>
+    <div class="split sideBarView">
+        {% include 'components/Sidebar.html' %}
+    </div>
+
+    <div class="split mainContentView">
+        {% include 'components/MainContent.html' %}
+    </div>
 {% endblock %}
