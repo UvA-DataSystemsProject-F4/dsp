@@ -28,12 +28,21 @@ def get_payload(msg, decode_base64=False):
         if not decode_base64:
             return body
         else:
-            return base64.b64decode(body + "===").decode('ISO-8859-1')
+            body = body.replace('\n', '')
+            if len(body) % 4:
+                body += '=' * (4 - len(body) % 4)
+            cleaned_sentence = re.sub(r'[^\x00-\x7f]', r'', base64.b64decode(body).decode('ISO-8859-1'))
+            return cleaned_sentence
     else:
         if not decode_base64:
             return msg.get_payload()
         else:
-            return base64.b64decode(msg.get_payload() + "===").decode('ISO-8859-1')
+            body = msg.get_payload()
+            body = body.replace('\n', '')
+            if len(body) % 4:
+                body += '=' * (4 - len(body) % 4)
+            cleaned_sentence = re.sub(r'[^\x00-\x7f]', r'', base64.b64decode(body).decode('ISO-8859-1'))
+            return cleaned_sentence
 
 
 def extract(mail, ds, is_base64) -> RawEmailData:
