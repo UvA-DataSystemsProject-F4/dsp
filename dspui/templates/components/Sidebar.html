@@ -1,3 +1,77 @@
-<div>
-    <h2>Sidebar</h2>
+<!DOCTYPE html>
+<html>
+    
+<div class="container-sm"
+     style="background-color: blue; color: white; height: 100%; padding: 10px 10px;">
+
+    <menu>
+        <li><a href="">Home</a></li> 
+        <li><a href="">About</a></li>
+    </menu>
+    <hr>
+    
+    <h4 class="fas fa-globe-europe fa-2x"><h4>Filters</h4></h4>
+    
+    <u><h6 class="fas fa-globe-europe fa-2x"><h6>Categories</h6></h6></u>
+    <div>
+        <input type="checkbox" id="identity" name="identity">
+        <label for="identity">Identity Theft</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="financial" name="financial">
+        <label for="financial">Financial Theft</label>
+    </div><br>
+    
+    <u><h6 class="fas fa-globe-europe fa-2x"><h6>Media Source</h6></h6></u>
+    <div>
+        <input type="checkbox" id="email" name="email">
+        <label for="email">Email</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="news" name="news">
+        <label for="news">News Article</label>
+    </div><br>
+    
+    <u><h6 class="fas fa-globe-europe fa-2x"><h6>Time Period</h6></h6></u>
+    
+    <body>
+    <div class="timeperiod">
+        <input type="range" min="2017" max="2021" value="50" class="slider" id="time">
+        <p>Year: <span id="year"></span></p>
+    </div><br>
+    
+    <script>
+    var slider = document.getElementById("time");
+    var output = document.getElementById("year");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+    </script>
+    </body>
+    
+    <div class="row align-items-center" style="padding-bottom: 10px">
+        <div class="col-md-auto">
+            <a class="SidebarButton" href="">Apply</a>
+        </div>
+        <div class="col-md-auto">
+            <a class="SidebarButton" href="">Reset</a>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <form class="search" action="">
+        <input type="text" placeholder="Search" name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+    
+    
 </div>
+    
+</html>
