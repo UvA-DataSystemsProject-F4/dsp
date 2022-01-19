@@ -1,4 +1,5 @@
 import email
+import io
 import os
 from fnmatch import fnmatch
 
@@ -34,4 +35,13 @@ class EmailImporter:
                         except AttributeError:
                             msg = email.message_from_file(f)  # Python 2
 
-                        extract_content(msg, SubDatasource.objects.get(source_information=name))
+                        try:
+                            extract_content(msg, SubDatasource.objects.get(source_information=name))
+                        except Exception as err:
+                            with io.open("MalformedEmails.txt", "a") as err_file:
+                                err_file.write(os.path.join(path, name) + "\n")
+                            with io.open("MalformedErrors.txt", "a") as err_file:
+                                if hasattr(err, 'message'):
+                                    err_file.write(err.message + "\n")
+                                else:
+                                    err_file.write(str(err) + "\ n")
