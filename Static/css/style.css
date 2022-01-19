@@ -7761,10 +7761,6 @@ textarea.form-control-lg {
   right: 0;
   background-color: lightblue; }
 
-/* Sidebar design */
-.container-sm {
-  border-right: 2px solid gold; }
-
 /* Menu design */
 menu {
   list-style-type: none;
