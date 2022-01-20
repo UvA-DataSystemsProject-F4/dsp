@@ -16,13 +16,16 @@ $tertiary: #c9dfdd;
 .sideBarView {
   width: 30%;
   left: 0;
-  background-color: gray;
+  background-color: $primary;
+  color: white;
+  height: 100%;
+  padding: 10px 10px;
 }
 
 .mainContentView {
   width: 70%;
   right: 0;
-  background-color: lightblue;
+  background-color: $tertiary;
 }
 
 /* Menu design */

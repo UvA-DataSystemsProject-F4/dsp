@@ -7754,12 +7754,15 @@ textarea.form-control-lg {
 .sideBarView {
   width: 30%;
   left: 0;
-  background-color: gray; }
+  background-color: #264653;
+  color: white;
+  height: 100%;
+  padding: 10px 10px; }
 
 .mainContentView {
   width: 70%;
   right: 0;
-  background-color: lightblue; }
+  background-color: #c9dfdd; }
 
 /* Menu design */
 menu {
