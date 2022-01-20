@@ -3,13 +3,37 @@ import codecs
 import email
 import re
 
+from dspdata.constants import nlp
 from dspdata.models import SubDatasource, RawEmailData
 
 
 def html_to_plain(html):
-    html = re.sub(r"<.*?>", "", html)  # Remove HTML tags
-    html = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", html)  # Remove URL's
-    return html
+    originalNLP = nlp(html)
+    sentences = [sent.text.strip() for sent in originalNLP.sents]
+
+    joined_sentence =  ''.join(sentences)
+
+    joined_sentence = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", joined_sentence)  # Remove URL's
+
+    split_sentence = joined_sentence.split("\n")
+    cleaned_sentence = ""
+    for split in split_sentence:
+        if not re.match(r"^[A-Za-z]|\s", split): continue  # Remove lines which do not start with text
+        cleaned_sentence += split
+
+    # Remove markup clutter
+    cleaned_sentence = re.sub(r"\n", "", cleaned_sentence)
+    cleaned_sentence = re.sub(r"=\d{0,3}", "", cleaned_sentence)
+    cleaned_sentence = re.sub(r"&nbsp;|&rsquo;|&#39;", "", cleaned_sentence)
+    cleaned_sentence = re.sub(r"\s\s+", " ", cleaned_sentence)
+    cleaned_sentence = re.sub(r"\.", " ", cleaned_sentence)
+    cleaned_sentence = re.sub(r"\d+", " ", cleaned_sentence)
+    cleaned_sentence = re.sub(r" +", " ", cleaned_sentence)
+    cleaned_sentence = re.sub(r"[^a-zA-Z]", " ", cleaned_sentence)
+
+    # Remove non latin characters
+    cleaned_sentence = re.sub(r'[^\x00-\x7f]', r'', cleaned_sentence)
+    return cleaned_sentence
 
 
 def get_payload(msg, decode_base64=False):
