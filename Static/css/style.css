@@ -7752,7 +7752,7 @@ textarea.form-control-lg {
   overflow-y: hidden; }
 
 .sideBarView {
-  width: 30%;
+  width: 20%;
   left: 0;
   background-color: #264653;
   color: white;
@@ -7760,8 +7760,9 @@ textarea.form-control-lg {
   padding: 10px 10px; }
 
 .mainContentView {
-  width: 70%;
+  width: 80%;
   right: 0;
+  padding: 10px 10px 10px 10px;
   background-color: #c9dfdd; }
 
 /* Menu design */
@@ -7777,7 +7778,7 @@ li a {
   text-decoration: none; }
 
 li a:hover {
-  color: gold; }
+  color: #c9dfdd; }
 
 /* Button design */
 .SidebarButton {
@@ -7791,9 +7792,9 @@ li a:hover {
 
 .SidebarButton:hover {
   border-radius: 4px;
-  border: 1px solid gold;
-  box-shadow: 1px 1px 1px gold;
-  color: gold; }
+  border: 1px solid #c9dfdd;
+  box-shadow: 1px 1px 1px #c9dfdd;
+  color: #c9dfdd; }
 
 /* Search */
 form {
@@ -7815,7 +7816,7 @@ form.search button {
   float: left;
   width: 15%;
   padding: 6px;
-  background: blue;
+  background: #264653;
   color: white;
   font-size: 14px;
   border: 1px solid white;
@@ -7827,9 +7828,9 @@ form.search button {
 
 form.search button:hover {
   border-radius: 2px;
-  color: gold;
-  border: 1px solid gold;
-  box-shadow: 1px 1px 1px gold; }
+  color: #c9dfdd;
+  border: 1px solid #c9dfdd;
+  box-shadow: 1px 1px 1px #c9dfdd; }
 
 /* Clear floats after search */
 form.search::after {
@@ -7846,7 +7847,7 @@ form.search::after {
   width: 100%;
   height: 6px;
   border-radius: 4px;
-  border: 1px solid gold;
+  border: 1px solid #c9dfdd;
   background: white;
   outline: none;
   opacity: 1;
@@ -7862,16 +7863,16 @@ form.search::after {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid blue;
-  background: gold;
+  border: 1px solid #264653;
+  background: #c9dfdd;
   cursor: pointer; }
 
 .slider::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid blue;
-  background: gold;
+  border: 1px solid #264653;
+  background: #c9dfdd;
   cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

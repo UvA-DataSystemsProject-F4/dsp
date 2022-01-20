@@ -14,7 +14,7 @@ $tertiary: #c9dfdd;
 }
 
 .sideBarView {
-  width: 30%;
+  width: 20%;
   left: 0;
   background-color: $primary;
   color: white;
@@ -23,8 +23,9 @@ $tertiary: #c9dfdd;
 }
 
 .mainContentView {
-  width: 70%;
+  width: 80%;
   right: 0;
+  padding: 10px 10px 10px 10px;
   background-color: $tertiary;
 }
 
@@ -43,7 +44,7 @@ li a {
 }
 
 li a:hover {
-  color: gold;
+  color: $tertiary;
 }
 
 
@@ -60,9 +61,9 @@ li a:hover {
 
 .SidebarButton:hover {
   border-radius: 4px;
-  border: 1px solid gold;
-  box-shadow: 1px 1px 1px gold;
-  color: gold;
+  border: 1px solid $tertiary;
+  box-shadow: 1px 1px 1px $tertiary;
+  color: $tertiary;
 }
 
 
@@ -88,7 +89,7 @@ form.search button {
   float: left;
   width: 15%;
   padding: 6px;
-  background: blue;
+  background: $primary;
   color: white;
   font-size: 14px;
   border: 1px solid white;
@@ -101,9 +102,9 @@ form.search button {
 
 form.search button:hover {
   border-radius: 2px;
-  color: gold;
-  border: 1px solid gold;
-  box-shadow: 1px 1px 1px gold;
+  color: $tertiary;
+  border: 1px solid $tertiary;
+  box-shadow: 1px 1px 1px $tertiary;
 }
 
 /* Clear floats after search */
@@ -124,7 +125,7 @@ form.search::after {
   width: 100%;
   height: 6px;
   border-radius: 4px;
-  border: 1px solid gold;
+  border: 1px solid $tertiary;
   background: white;
   outline: none;
   opacity: 1;
@@ -142,8 +143,8 @@ form.search::after {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid blue;
-  background: gold;
+  border: 1px solid $primary;
+  background: $tertiary;
   cursor: pointer;
 }
 
@@ -151,7 +152,7 @@ form.search::after {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid blue;
-  background: gold;
+  border: 1px solid $primary;
+  background: $tertiary;
   cursor: pointer;
 }
