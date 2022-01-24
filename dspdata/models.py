@@ -7,6 +7,7 @@ class Datasource(models.Model):
     description = models.CharField(max_length=2560)
     link = models.CharField(max_length=1024)
 
+
 class SubDatasource(models.Model):
     datasource = models.ForeignKey(Datasource, on_delete=models.DO_NOTHING, related_name='children')
     source_information = models.CharField(max_length=1024)

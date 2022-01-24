@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import path
 
 from dspdata import views
-from dspui.views import IndexView
+from dspui.views import IndexView, DatasourceView, SubDatasourceView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('loaddata/', views.loaddata_view),
     path('', IndexView.as_view()),
+    path('datasource/', DatasourceView.as_view()),
+    path('datasource/<int:id>', DatasourceView.as_view()),
+    path('subdatasource/<int:id>', SubDatasourceView.as_view()),
 
 ]

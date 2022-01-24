@@ -1,0 +1,58 @@
+{% extends 'Base.html' %}
+{% block content %}
+    <div class="my-5">
+        {% if sources %}
+            <table id="datasource_table"
+                   class="table table-secondary table-bordered table-striped table-hover display nowrap"
+                   style="width:100%">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for source in sources %}
+                    <tr class="clickable" onclick="redirectTo('/datasource/{{ source.id }}')">
+                        <th scope="row">{{ source.id }}</th>
+                        <td>{{ source.description }}</td>
+                        <td>{{ source.link }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <script>
+                $(document).ready(function () {
+                    toDataTable('datasource_table')
+                });
+            </script>
+        {% else %}
+            <h1>Datasource: {{ source.id }}</h1>
+            <hr>
+            <table id="subdatasource_table"
+                   class="table table-secondary table-bordered table-striped table-hover display nowrap"
+                   style="width:100%">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Information</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for source in subsources %}
+                    <tr class="clickable" onclick="redirectTo('/subdatasource/{{ source.id }}')">
+                        <th scope="row">{{ source.id }}</th>
+                        <td>{{ source.source_information }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <script>
+                $(document).ready(function () {
+                    toDataTable('subdatasource_table')
+                });
+            </script>
+        {% endif %}
+    </div>
+{% endblock %}
