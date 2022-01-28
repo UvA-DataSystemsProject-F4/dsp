@@ -22,6 +22,7 @@ from dspui.views import IndexView, DatasourceView, SubDatasourceView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('loaddata/', views.loaddata_view),
+    path('pipeline/', views.pipeline_view),
     path('', IndexView.as_view()),
     path('datasource/', DatasourceView.as_view()),
     path('datasource/<int:id>', DatasourceView.as_view()),

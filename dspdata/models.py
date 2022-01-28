@@ -23,11 +23,16 @@ class RawEmailData(models.Model):
 
 class EmailDataPoint(models.Model):
     TYPE_CHOICES = (
-        (1, 'NamedEntity'),
-        (2, 'ExternalReference'),
-        (3, 'Other'),
-
+        (1, 'word_tokens'),
+        (2, 'bag_of_words'),
+        (4, 'top_10_most_freq_words'),
+        (5, 'twograms'),
+        (6, 'top_10_most_freq_twogram'),
+        (12, 'is_scam'),
+        (20, 'Tfidf'),
+        (30, 'Named Entity'),
+        (44, 'Cluster'),
     )
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES, blank=True, null=True)
     email = models.ForeignKey(RawEmailData, on_delete=models.DO_NOTHING, related_name='datapoints')
-    value = models.TextField()
+    value = JSONField(null=True, blank=True)

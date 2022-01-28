@@ -4,17 +4,17 @@ import nltk
 import pandas as pd
 import spacy
 from nltk import ngrams
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from dspdata.models import RawEmailData
+from dspdata.constants import wordnet_lemmatizer, list_of_scam_words
+from dspdata.models import EmailDataPoint
 
 
 class EmailPipeline:
 
-    def __init__(self, email_data: RawEmailData) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.email_data = email_data
+        self.email_data = None
 
     def load_nltk(self):
         nltk.download('stopwords')
@@ -45,14 +45,19 @@ class EmailPipeline:
         twogram_dict = {}
 
         for twogram in twograms:
-            if twogram not in twogram_dict.keys():
-                twogram_dict[twogram] = 1
+            if str(twogram) not in twogram_dict.keys():
+                twogram_dict[str(twogram)] = 1
             else:
-                twogram_dict[twogram] += 1
+                twogram_dict[str(twogram)] += 1
 
         # Get top 10 most frequently used two gram
         most_frequent_twograms = heapq.nlargest(10, twogram_dict, key=twogram_dict.get)
-        print(most_frequent_twograms)
+
+        EmailDataPoint(type=1, email=self.email_data, value=tokens).save()
+        EmailDataPoint(type=2, email=self.email_data, value=bag_of_words).save()
+        EmailDataPoint(type=3, email=self.email_data, value=most_frequent_words).save()
+        EmailDataPoint(type=4, email=self.email_data, value=twogram_dict).save()
+        EmailDataPoint(type=5, email=self.email_data, value=most_frequent_twograms).save()
 
     def run_tfidf(self):
         tfidf_vectorizer = TfidfVectorizer()
@@ -63,7 +68,7 @@ class EmailPipeline:
                                                 columns=["tfidf"])
         sorted_tfidf_in_document = df_for_tfidf_in_document.sort_values(by=["tfidf"], ascending=False)
         top_10_tfidf = sorted_tfidf_in_document[0:10].to_dict()["tfidf"]
-        print(top_10_tfidf)
+        EmailDataPoint(type=20, email=self.email_data, value=top_10_tfidf).save()
 
     def run_named_entity(self):
         nlp = spacy.load("en_core_web_sm")
@@ -72,16 +77,32 @@ class EmailPipeline:
         for named_entity in named_entities.ents:
             named_entity_tuple = (named_entity.text, named_entity.label_)
             # Count named entities in the document
-            if named_entity_tuple not in named_entity_list.keys():
-                named_entity_list[named_entity_tuple] = 1
+            if str(named_entity_tuple) not in named_entity_list.keys():
+                named_entity_list[str(named_entity_tuple)] = 1
             else:
-                named_entity_list[named_entity_tuple] += 1
+                named_entity_list[str(named_entity_tuple)] += 1
+        EmailDataPoint(type=30, email=self.email_data, value=named_entity_list).save()
 
-    def cluster(self):
+    def run_is_scam(self):
+        EmailDataPoint(type=12, email=self.email_data, value=self.is_scam()).save()
+
+    def is_scam(self):
+        bag_of_words_dp = EmailDataPoint.objects.filter(type=2, email_id=self.email_data.id).first()
+        for scam_word in list_of_scam_words:
+            lem_scam_word = wordnet_lemmatizer.lemmatize(scam_word.lower())
+            if scam_word in bag_of_words_dp or lem_scam_word in bag_of_words_dp:
+                return True
+        return False
+
+    def run_cluster(self):
         return None
 
-    def run(self):
+    def initialize(self):
         self.load_nltk()
+
+    def run(self, email_data):
+        self.email_data = email_data
         self.run_tokenization()
         self.run_tfidf()
         self.run_named_entity()
+        self.run_is_scam()

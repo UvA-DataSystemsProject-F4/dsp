@@ -1,24 +1,31 @@
 import base64
-import codecs
 import email
 import re
 
-from dspdata.constants import nlp
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+from spacy.lang.en import English
+
+from dspdata.constants import words, punctuation, wordnet_lemmatizer
 from dspdata.models import SubDatasource, RawEmailData
+
+nlp = English()
+nlp.add_pipe('sentencizer')
 
 
 def html_to_plain(html):
     originalNLP = nlp(html)
     sentences = [sent.text.strip() for sent in originalNLP.sents]
 
-    joined_sentence =  ''.join(sentences)
+    joined_sentence = ''.join(sentences)
 
     joined_sentence = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", joined_sentence)  # Remove URL's
 
     split_sentence = joined_sentence.split("\n")
     cleaned_sentence = ""
     for split in split_sentence:
-        if not re.match(r"^[A-Za-z]|\s", split): continue  # Remove lines which do not start with text
+        if not re.match(r"^[A-Za-z]|\s", split):
+            continue  # Remove lines which do not start with text
         cleaned_sentence += split
 
     # Remove markup clutter
@@ -33,7 +40,26 @@ def html_to_plain(html):
 
     # Remove non latin characters
     cleaned_sentence = re.sub(r'[^\x00-\x7f]', r'', cleaned_sentence)
-    return cleaned_sentence
+    pre_processed_sentence = ""
+    tokens = word_tokenize(cleaned_sentence)
+    for token in tokens:
+        if token.lower() not in words or not token.lower().isalpha():
+            continue
+
+        if len(token.lower()) == 1 and token.lower() not in ["a", "i"]:
+            continue
+
+        if token.lower() in stopwords.words('english'):  # Dont use stop words for final sentence
+            continue
+
+        if token in punctuation:  # Dont use punctuation for final sentence
+            continue
+        # stemmed = porter.stem(token) # Apply stemming
+        lemmatized = wordnet_lemmatizer.lemmatize(token.lower())  # Apply lemmatization
+
+        pre_processed_sentence += lemmatized + " "
+
+    return pre_processed_sentence
 
 
 def get_payload(msg, decode_base64=False):
@@ -69,14 +95,20 @@ def get_payload(msg, decode_base64=False):
             return cleaned_sentence
 
 
-def extract(mail, ds, is_base64) -> RawEmailData:
+def extract(mail, ds, is_base64):
     body = get_payload(mail, is_base64)
+    plain = html_to_plain(body)
+    if len(set(plain)) < 20:
+        return
     headers_raw = dict(mail.items())
     headers_str = {str(key): str(value) for key, value in
                    headers_raw.items()}  # Fixing that some headers are not strings ?!?
-    return RawEmailData(datasource=ds, headers=headers_str, subject=mail['Subject'], content_raw=body,
-                        content_text=html_to_plain(body)).save()
+    email_data = RawEmailData(datasource=ds, headers=headers_str, subject=mail['Subject'], content_raw=body,
+                              content_text=plain)
+    email_data.save()
+    return email_data
 
 
 def extract_content(mail: email.message.Message, sbs: SubDatasource):
-    model = extract(mail, sbs, mail['Content-Transfer-Encoding'] is not None and "base64" in mail['Content-Transfer-Encoding'].lower())
+    return extract(mail, sbs, mail['Content-Transfer-Encoding'] is not None and "base64" in mail[
+        'Content-Transfer-Encoding'].lower())
