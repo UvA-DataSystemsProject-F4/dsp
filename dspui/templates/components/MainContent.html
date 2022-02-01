@@ -3,50 +3,22 @@
 </div>
 
 <div>
-    <canvas id="myChart"></canvas>
-</div>
-
-<script>
-    const labels = [
-        'Jan, 2017',
-        'Feb, 2017',
-        'Mar, 2017',
-        'Apr, 2017',
-        'May, 2017',
-        'Jun, 2017',
-        'Jul, 2017',
-        'Aug, 2017',
-        'Sep, 2017',
-        'Oct, 2017',
-        'Nov, 2017',
-        'Dec, 2017',
-    ];
-
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Number of Crimes',
-            backgroundColor: 'gray',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [600, 300, 700, 500, 1300, 1200, 1900, 1500, 1800, 2100, 2800, 2200, 2000],
-        }]
-    };
-
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+    <canvas id="results_chart"></canvas>
+    <script>
+        function GetFilterData() {
+            return {
+                'filter_year_start': document.getElementById("time_start").value,
+                'filter_year_end': document.getElementById("time_end").value,
+                'filter_spam': $('#chk_spam_filter')[0].checked,
+                'filter_keywords': document.getElementById("keywords").value
             }
-        },
-    };
-</script>
-<script>
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
-</script>
+        }
+
+        function UpdateMainViewChart() {
+            Charts.CreateBarChart("results_chart", `/api/bardata`, GetFilterData())
+        }
+
+        UpdateMainViewChart()
+    </script>
+
+</div>

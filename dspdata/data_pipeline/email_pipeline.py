@@ -90,7 +90,7 @@ class EmailPipeline:
         bag_of_words_dp = EmailDataPoint.objects.filter(type=2, email_id=self.email_data.id).first()
         for scam_word in list_of_scam_words:
             lem_scam_word = wordnet_lemmatizer.lemmatize(scam_word.lower())
-            if scam_word in bag_of_words_dp or lem_scam_word in bag_of_words_dp:
+            if scam_word in bag_of_words_dp.value or lem_scam_word in bag_of_words_dp.value:
                 return True
         return False
 

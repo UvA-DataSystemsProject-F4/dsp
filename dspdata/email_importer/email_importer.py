@@ -19,9 +19,16 @@ class EmailImporter:
         else:
             Datasource(name="SPAM Archive", description="Spam Archive http://untroubled.org/spam/",
                        link="http://untroubled.org/spam/").save()
-
+        count = 0
+        count2 = 0
         for path, subdirs, files in tqdm(list(os.walk(self.root_dir))):
+            count += 1
+            if count < 19:
+                continue
             for name in tqdm(files):
+                count2 += 1
+                if count2 < 103563:
+                    continue
                 if fnmatch(name, "*.txt"):
                     if SubDatasource.objects.filter(source_information=name).exists():
                         sbs = SubDatasource.objects.get(source_information=name)

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from dspdata import views
+from dspui.api_views import ApiTest, ApiMainView
 from dspui.views import IndexView, DatasourceView, SubDatasourceView
 
 urlpatterns = [
@@ -27,5 +28,6 @@ urlpatterns = [
     path('datasource/', DatasourceView.as_view()),
     path('datasource/<int:id>', DatasourceView.as_view()),
     path('subdatasource/<int:id>', SubDatasourceView.as_view()),
-
+    path('api/test', ApiTest.as_view()),
+    path('api/bardata', ApiMainView.as_view())
 ]

@@ -24,35 +24,56 @@
     <u><h6>Time Period</h6></u>
 
     <div class="timeperiod">
-        <input type="range" min="2017" max="2021" value="50" class="slider" id="time">
-        <p>Year: <span id="year"></span></p>
+        <input type="range" min="2018" max="2021" value="2018" class="slider" id="time_start">
+        <p>Start Year: <span id="year_start"></span></p>
     </div>
+    <div class="timeperiod">
+        <input type="range" min="2018" max="2021" value="2021" class="slider" id="time_end">
+        <p>End Year: <span id="year_end"></span></p>
+    </div>
+
+
+    <div class="mb-3">
+        <input type="text" id="keywords" name="keywords">
+        <label for="keywords">Keywords separate by Comma (,)</label>
+    </div>
+    <hr>
+    <div class="form-check">
+        <label for="chk_spam_filter" class="form-check-label">Experimental: Advanced Spam filter that can increase data
+            quality, but lowers quantity</label>
+        <input id="chk_spam_filter" class="form-check-input" type="checkbox">
+    </div>
+
     <br>
 
     <script>
-        var slider = document.getElementById("time");
-        var output = document.getElementById("year");
-        output.innerHTML = slider.value;
+        var slider_start = document.getElementById("time_start");
+        var output_start = document.getElementById("year_start");
+        var slider_end = document.getElementById("time_end");
+        var output_end = document.getElementById("year_end");
 
-        slider.oninput = function () {
-            output.innerHTML = this.value;
+        output_start.innerHTML = slider_start.value;
+        slider_start.oninput = function () {
+            output_start.innerHTML = this.value;
+            slider_end.min = this.value
         }
+
+        output_end.innerHTML = slider_end.value;
+        slider_end.oninput = function () {
+            output_end.innerHTML = this.value;
+        }
+
     </script>
 
     <div class="row align-items-center" style="padding-bottom: 10px">
         <div class="col-md-auto">
-            <a class="SidebarButton" href="">Apply</a>
+            <button class="btn btn-secondary" onclick="UpdateMainViewChart()">Search</button>
         </div>
         <div class="col-md-auto">
-            <a class="SidebarButton" href="">Reset</a>
+            <button class="btn btn-outline-secondary" href="">Reset</button>
         </div>
     </div>
-
     <hr>
-    <form class="search" action="">
-        <input type="text" placeholder="Search" name="search">
-        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-    </form>
 
 
 </div>

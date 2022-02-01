@@ -16,7 +16,7 @@ $tertiary: #c9dfdd;
 .sideBarView {
   width: 20%;
   left: 0;
-  background-color: $primary;
+  background-color: lighten($primary, 0.3);
   color: white;
   height: 100%;
   padding: 10px 10px;
