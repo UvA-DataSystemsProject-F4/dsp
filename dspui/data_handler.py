@@ -71,17 +71,25 @@ def load_by_year_month_filter(filter_year_start, filter_year_end, filter_spam, f
 
 
 def load_cluster_data(filter_year_start, filter_year_end, filter_spam, filter_keywords):
-    strings = EmailDataPoint.objects \
+    email_ids = EmailDataPoint.objects \
         .filter(query_spam(filter_spam)) \
         .filter(query_time(filter_year_start, filter_year_end)) \
         .filter(query_keyword(filter_keywords)) \
         .order_by('email') \
-        .values_list('email__content_text', flat=True) \
-        .distinct() \
-
-    tfidf = data_cluster.create_tfidf(strings)
+        .values_list('email', flat=True) \
+        .distinct()
+    strings_id = RawEmailData.objects.filter(id__in=email_ids).values_list('content_text', 'id')
+    tfidf = data_cluster.create_tfidf([x[0] for x in strings_id])
+    datasets, labels = data_cluster.create_plot_cluster(tfidf)
     return {
-        'datasets': list(data_cluster.create_plot_cluster(tfidf).values())
+        'plotting': {
+            'datasets': list(datasets.values())
+        },
+        'clusterData': {
+            'labels': labels.tolist(),
+            'data': list([x[0] for x in strings_id]),
+            'id': [x[1] for x in strings_id]
+        }
     }
 
 

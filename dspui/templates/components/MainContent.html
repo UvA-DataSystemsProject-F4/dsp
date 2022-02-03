@@ -1,6 +1,5 @@
 <div id="header">
     <h1>Modus Operandi Digital Scams</h1>
-    <button onclick="showDetailModal('Jan_2018')"></button>
 </div>
 
 <div>
@@ -17,6 +16,18 @@
         <div class="card-body">
             <div class="chart-container" style="position: relative; margin: auto; height:50vh;">
                 <canvas id="cluster_chart"></canvas>
+            </div>
+            <div>
+                <table id="clusterResultTable" class="table table-secondary table-bordered table-striped table-hover display nowrap">
+                    <thead>
+                    <tr>
+                        <th scope="col">Cluster ID</th>
+                        <th scope="col">Text</th>
+                    </tr>
+                    </thead>
+                    <tbody id="clusterResultTableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -62,7 +73,5 @@
         modal.modal('toggle')
         modal.find('.modal-title').text("Details for: " + time)
         modalBody.html(Charts.CreateLoadingElement())
-
-
     }
 </script>

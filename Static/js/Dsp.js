@@ -105,6 +105,13 @@ class Charts {
         });
     }
 
+    static CreateClusterTableRow(label, content, id) {
+        return `<tr onclick="redirectToNewTab('/subdatasource/${id}')">
+                    <td>${label}</td>
+                    <td>${content}</td>
+                </tr>`
+    }
+
     static CreateScatterChart(cid, data_url, parameters) {
         const container = document.getElementById(cid).parentElement
         container.innerHTML = this.CreateLoadingElement()
@@ -119,16 +126,24 @@ class Charts {
                 canvas.id = cid
                 container.innerHTML = canvas.outerHTML
                 const ctx = document.getElementById(cid).getContext('2d');
-                for (let i = response['datasets'].length - 1; i >= 0; i--) {
-                    $.extend(response['datasets'][i], Charts.CreateScatterStyle());
+                const plottingData = response['plotting']
+                for (let i = plottingData['datasets'].length - 1; i >= 0; i--) {
+                    $.extend(plottingData['datasets'][i], Charts.CreateScatterStyle());
                 }
                 new Chart(ctx, {
                     options: {
                         maintainAspectRatio: false,
                     },
                     type: 'scatter',
-                    data: response
+                    data: plottingData
                 });
+                const clusterData = response['clusterData']
+                const tableBody = $('#clusterResultTableBody')
+                tableBody.html("")
+                for (let i = clusterData['labels'].length - 1; i >= 0; i--) {
+                    tableBody.append(Charts.CreateClusterTableRow(clusterData['labels'][i], clusterData['data'][i], clusterData['id'][i]))
+                }
+                toDataTable('clusterResultTable')
             },
             error: function (response) {
                 container.innerHTML = Charts.CreateErrorPane(response.responseText)

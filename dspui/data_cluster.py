@@ -28,4 +28,4 @@ def create_plot_cluster(tfidf):
             'x': float(tfs_embedded[i, 0]),
             'y': float(tfs_embedded[i, 1]),
         })
-    return datasets
+    return datasets, model.labels_

@@ -8,6 +8,7 @@
 
     <h4>Filters</h4>
 
+{% comment %}
     <u>
         <h6>Categories</h6>
     </u>
@@ -20,15 +21,16 @@
         <label for="financial">Financial Theft</label>
     </div>
     <br>
+{% endcomment %}
 
     <u><h6>Time Period</h6></u>
 
     <div class="timeperiod">
-        <input type="range" min="2018" max="2021" value="2018" class="slider" id="time_start">
+        <input type="range" min="2018" max="2020" value="2018" class="slider" id="time_start">
         <p>Start Year: <span id="year_start"></span></p>
     </div>
     <div class="timeperiod">
-        <input type="range" min="2018" max="2021" value="2018" class="slider" id="time_end">
+        <input type="range" min="2018" max="2020" value="2018" class="slider" id="time_end">
         <p>End Year: <span id="year_end"></span></p>
     </div>
 
