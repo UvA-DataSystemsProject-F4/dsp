@@ -1,9 +1,25 @@
 <div id="header">
     <h1>Modus Operandi Digital Scams</h1>
+    <button onclick="showDetailModal('Jan_2018')"></button>
 </div>
 
 <div>
-    <canvas id="results_chart"></canvas>
+    <div class="card" style="margin-bottom: 10px">
+        <div class="card-header"><h3>Timeline</h3></div>
+        <div class="card-body">
+            <div class="chart-container" style="position: relative; margin: auto; height:50vh">
+                <canvas id="results_chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header"><h3>Cluster</h3></div>
+        <div class="card-body">
+            <div class="chart-container" style="position: relative; margin: auto; height:50vh;">
+                <canvas id="cluster_chart"></canvas>
+            </div>
+        </div>
+    </div>
     <script>
         function GetFilterData() {
             return {
@@ -16,9 +32,37 @@
 
         function UpdateMainViewChart() {
             Charts.CreateBarChart("results_chart", `/api/bardata`, GetFilterData())
+            Charts.CreateScatterChart("cluster_chart", `/api/cluster`, GetFilterData())
         }
 
         UpdateMainViewChart()
     </script>
-
 </div>
+<script>
+    function showDetailModal(time) {
+        const modal = $('#detailModal');
+        const modalBody = $('#detailModalContent')
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+            url: "/api/detailview",
+            data: {
+                'filter_spam': $('#chk_spam_filter')[0].checked,
+                'filter_keywords': document.getElementById("keywords").value,
+                'time_step': time
+            },
+            success: function (response) {
+                modalBody.html(response)
+                toDataTable('email_table')
+            },
+            error: function (response) {
+                modalBody.html(Charts.CreateErrorPane(response.responseText))
+            },
+        });
+        modal.modal('toggle')
+        modal.find('.modal-title').text("Details for: " + time)
+        modalBody.html(Charts.CreateLoadingElement())
+
+
+    }
+</script>

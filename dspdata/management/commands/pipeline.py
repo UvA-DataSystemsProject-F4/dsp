@@ -12,4 +12,5 @@ class Command(BaseCommand):
         importer = EmailPipeline()
         importer.initialize()
         for data in tqdm(RawEmailData.objects.all()):
-            importer.run(data)
+            if data.id >= 46269:
+                importer.run(data)

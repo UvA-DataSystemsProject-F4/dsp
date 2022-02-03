@@ -1,0 +1,20 @@
+<table id="email_table"
+       class="table table-secondary table-bordered table-striped table-hover display nowrap"
+       style="width:100%">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Date</th>
+        <th scope="col">Subject</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for email in emails %}
+        <tr class="clickable" onclick="redirectToNewTab('/subdatasource/{{ email.id }}')">
+            <th scope="row">{{ email.id }}</th>
+            <td>{{ email.headers.Date }}</td>
+            <td>{{ email.subject }}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

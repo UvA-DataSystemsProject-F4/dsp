@@ -1,6 +1,7 @@
 from django.db.models import Q
 
 from dspdata.models import RawEmailData, EmailDataPoint
+from dspui import data_cluster
 
 Month_Short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -37,6 +38,14 @@ def query_keyword(filter_keyword):
     return query
 
 
+def query_time(year_start, year_end):
+    query = Q()
+    for filter_year in range(year_start, year_end + 1):
+        for month in range(0, 12):
+            query = query | Q(email__headers__contains=f"{Month_Short[month]} {filter_year}")
+    return query
+
+
 def load_by_year_month_filter(filter_year_start, filter_year_end, filter_spam, filter_keywords):
     results = {}
     for filter_year in range(filter_year_start, filter_year_end + 1):
@@ -45,7 +54,8 @@ def load_by_year_month_filter(filter_year_start, filter_year_end, filter_spam, f
                 .filter(query_spam(filter_spam)) \
                 .filter(email__headers__contains=f"{Month_Short[month]} {filter_year}") \
                 .filter(query_keyword(filter_keywords)) \
-                .values('email') \
+                .order_by('email') \
+                .values_list('email', flat=True) \
                 .distinct() \
                 .count()
 
@@ -58,3 +68,30 @@ def load_by_year_month_filter(filter_year_start, filter_year_end, filter_spam, f
             },
         ]
     }
+
+
+def load_cluster_data(filter_year_start, filter_year_end, filter_spam, filter_keywords):
+    strings = EmailDataPoint.objects \
+        .filter(query_spam(filter_spam)) \
+        .filter(query_time(filter_year_start, filter_year_end)) \
+        .filter(query_keyword(filter_keywords)) \
+        .order_by('email') \
+        .values_list('email__content_text', flat=True) \
+        .distinct() \
+
+    tfidf = data_cluster.create_tfidf(strings)
+    return {
+        'datasets': list(data_cluster.create_plot_cluster(tfidf).values())
+    }
+
+
+def load_year_month_email_filter(time_step, filter_spam, filter_keywords):
+    email_ids = EmailDataPoint.objects \
+        .filter(query_spam(filter_spam)) \
+        .filter(email__headers__contains=f"{time_step[0]} {time_step[1]}") \
+        .filter(query_keyword(filter_keywords)) \
+        .order_by('email') \
+        .values_list('email', flat=True) \
+        .distinct()
+
+    return RawEmailData.objects.filter(id__in=email_ids)

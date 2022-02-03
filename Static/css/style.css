@@ -7746,10 +7746,8 @@ textarea.form-control-lg {
 .split {
   height: 100%;
   position: fixed;
-  z-index: 1;
   top: 0;
-  overflow-x: hidden;
-  overflow-y: hidden; }
+  overflow-x: hidden; }
 
 .sideBarView {
   width: 20%;
